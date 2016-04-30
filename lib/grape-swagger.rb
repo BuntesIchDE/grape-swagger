@@ -48,8 +48,8 @@ module Grape
 
       def combine_routes(app, doc_klass)
         app.routes.each do |route|
-          route_path = route.route_path
-          route_match = route_path.split(/^.*?#{route.route_prefix.to_s}/).last
+          route_path = route.path
+          route_match = route_path.split(/^.*?#{route.prefix.to_s}/).last
           next unless route_match
           route_match = route_match.match('\/([\w|-]*?)[\.\/\(]') || route_match.match('\/([\w|-]*)$')
           next unless route_match
@@ -57,7 +57,7 @@ module Grape
           next if resource.empty?
           resource.downcase!
           @target_class.combined_routes[resource] ||= []
-          next if doc_klass.hide_documentation_path && route.route_path.match(/#{doc_klass.mount_path}($|\/|\(\.)/)
+          next if doc_klass.hide_documentation_path && route.path.match(/#{doc_klass.mount_path}($|\/|\(\.)/)
           @target_class.combined_routes[resource] << route
         end
       end
